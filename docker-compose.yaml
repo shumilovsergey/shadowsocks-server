@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  shadowsocks:
+    build: .
+    container_name: shadowsocks_server
+    ports:
+      - "<port>:<port>"  # Expose Shadowsocks port to the host
+    command: ["-s", "0.0.0.0", "-p", "<port>", "-k", "<password>", "-m", "chacha20-ietf-poly1305"]
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
