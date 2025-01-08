@@ -1,17 +1,14 @@
-# Use an official lightweight image
 FROM ubuntu:20.04
-
-# Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install required packages
 RUN apt-get update && apt-get install -y \
-    shadowsocks-libev \
+    shadowsocks-libev iptables \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Expose Shadowsocks port
-EXPOSE <port>
+COPY reset_shadowsocks.sh /usr/local/bin/reset_shadowsocks.sh
+RUN chmod +x /usr/local/bin/reset_shadowsocks.sh
 
-# Entry point for the container
+EXPOSE 8388
+
 ENTRYPOINT ["ss-server"]
-CMD ["-s", "0.0.0.0", "-p", "<port>", "-k", "<password>", "-m", "chacha20-ietf-poly1305"]
+CMD ["-s", "0.0.0.0", "-p", "8388", "-k", "password", "-m", "chacha20-ietf-poly1305", "-t", "60"]
