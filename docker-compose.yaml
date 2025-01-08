@@ -1,12 +1,17 @@
 version: '3.8'
-
 services:
   shadowsocks:
     build: .
     container_name: shadowsocks_server
     ports:
-      - "<port>:<port>"  # Expose Shadowsocks port to the host
-    command: ["-s", "0.0.0.0", "-p", "<port>", "-k", "<password>", "-m", "chacha20-ietf-poly1305"]
+      - "8388:8388"
+    command: ["-s", "0.0.0.0", "-p", "8388", "-k", "password", "-m", "chacha20-ietf-poly1305", "-t", "60"]
     dns:
       - 8.8.8.8
       - 1.1.1.1
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - ./reset_shadowsocks.sh:/usr/local/bin/reset_shadowsocks.sh
